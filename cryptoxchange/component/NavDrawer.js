@@ -4,6 +4,7 @@ import { Image, View } from 'react-native';
 import { DrawerNavigator, DrawerItems } from 'react-navigation';
 import Buy from './Buy';
 import Sell from './Sell';
+import PriceList from './PriceList';
 
 const customDrawer = (props) => (
 
@@ -27,7 +28,7 @@ const customDrawer = (props) => (
 
 
 const NavDrawer = DrawerNavigator({
-    
+    PriceList: { screen: PriceList },
     Buy: { screen: Buy },
     Sell: { screen: Sell },
     
