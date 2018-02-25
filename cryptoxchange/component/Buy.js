@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import { Image, View } from 'react-native';
 import { Container, Card, CardItem, Form, Item, Label, Input, Thumbnail, Text , Content, Header, Left, Body, Right, Button, Icon, Title } from 'native-base';
+
+
+
 export default class Buy extends Component {
 
 
@@ -15,6 +18,7 @@ export default class Buy extends Component {
           mobile: ''
         }
       }
+
 
 
 render() {

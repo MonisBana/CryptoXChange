@@ -28,7 +28,8 @@ const customDrawer = (props) => (
 
 
 const NavDrawer = DrawerNavigator({
-    PriceList: { screen: PriceList },
+    
+    Pricelist: { screen: PriceList },
     Buy: { screen: Buy },
     Sell: { screen: Sell },
     
