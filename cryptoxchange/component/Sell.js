@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { Image, View } from 'react-native';
 import { Container, Card, CardItem, Form, Item, Label, Input, Thumbnail, Text , Content, Header, Left, Body, Right, Button, Icon, Title } from 'native-base';
+import RazorpayCheckout from 'react-native-razorpay';
+
 export default class Sell extends Component {
 
 
@@ -28,9 +30,6 @@ render() {
     <Container>
         <Header>
             <Left>
-                <Button transparent onPress={ () => navigate('DrawerOpen') }>
-                <Icon name='menu' />
-                </Button>
             </Left>
             <Body>
                 <Title>Sell Bitcoin</Title>

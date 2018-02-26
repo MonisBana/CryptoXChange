@@ -8,14 +8,14 @@ import {
   NativeModules,
   NativeEventEmitter
 } from 'react-native';
-import NavDrawer from './NavDrawer';
+import StackNavigator from './NavDrawer';
 
 
 export default class App extends Component {
 
   render() {
     return (
-      <NavDrawer />
+      <StackNavigator />
     );
   }
 

@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
-import { Image, View } from 'react-native';
-import { Container, Card, CardItem, Form, Item, Label, Input, Thumbnail, Text, Content, Left, Body, Right, Icon, Title } from 'native-base';
+import { Image, View, StatusBar } from 'react-native';
+import { Header, Container, Card, CardItem, Form, Item, Label, Button, Input, Thumbnail, Text, Content, Left, Body, Right, Icon, Title } from 'native-base';
 import { Grid, Col, Row } from 'react-native-easy-grid';
-import Button from './Button';
+//import Button from './Button';
 import CardSection from './CardSection';
-import Header from './Header';
+import { StackNavigator } from 'react-navigation';
+
+//import Header from './Header';
 
 class PriceList extends Component {
     state = { buyprice: '', sellprice: '' };
@@ -30,21 +32,39 @@ class PriceList extends Component {
         var { navigate } = this.props.navigation;
 
         return (
-            <View>
-                <Header  headerText="CryptoXChange" /> 
-                <View style={{ backgroundColor: '#f7921b',height: 335 }}>
+            <Container>
+                <Header androidStatusBarColor="#f7921b" style={{backgroundColor:'#f7921b'}}>
+                    
+                    <Body>
+                        <Title>
+                            CryptoXChange
+                        </Title>
+                    </Body>
+                    
+                </Header> 
+                <Content style={{ backgroundColor:'white' }}>
+                <View style={{ backgroundColor: '#f7921b',height: 335, alignItems:'center', justifyContent:'center' }}>
                     <Image source={require('./Bitcoin.png')} style={styles.iconStyles} />
                     <Text style={styles.BitconStyle}>Bitcoin</Text>
-                    <View style={{ flex: 1, flexDirection: 'row' }}>
+                    <View style={{ flex: 1, flexDirection: 'row', alignItems:'center', justifyContent:'center' }}>
                         <Text style={styles.BuyStyle}>Buy: {this.state.buyprice}</Text>
                         <Text style={styles.BuyStyle}>Sell: {this.state.sellprice}</Text>
                     </View>
                 </View>
-                <CardSection style={{ flex: 1, flexDirection: 'row'}}>
-                    <Button style={{ height: 30 }}>Buy</Button>
-                    <Button style={{ height: 30 }}>Sell</Button>
-                </CardSection>
-            </View>
+                <View style={{ paddingTop:30, backgroundColor:'white', flex: 1, flexDirection: 'row',justifyContent:'space-around',alignItems:'center' }}>
+                    <Button onPress={() => navigate('Buy')} rounded warning style={{ width:150, backgroundColor:'#f7921b' }}>
+                        <View style={{ flex:1, flexDirection: 'row', justifyContent:'center', alignItems:'center' }}>
+                        <Text>Buy</Text>
+                        </View>
+                    </Button>
+                    <Button onPress={() => navigate('Sell')} rounded warning style={{ width:150, backgroundColor:'#f7921b' }}>
+                        <View style={{ flex:1, flexDirection: 'row', justifyContent:'center', alignItems:'center' }}>
+                        <Text>Sell</Text>
+                        </View>
+                    </Button>
+                </View>
+                </Content>
+            </Container>
         );
     }
 }

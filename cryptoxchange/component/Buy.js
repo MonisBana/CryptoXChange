@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Image, View } from 'react-native';
 import { Container, Card, CardItem, Form, Item, Label, Input, Thumbnail, Text , Content, Header, Left, Body, Right, Button, Icon, Title } from 'native-base';
-
+import RazorpayCheckout from 'react-native-razorpay';
 
 
 export default class Buy extends Component {
@@ -24,15 +24,38 @@ export default class Buy extends Component {
 render() {
 
     var { navigate } = this.props.navigation;
+
+    pay = () => {
+        
+            var options = {
+              description: 'Buy Bitcoin',
+              image: './Bitcoin.png',
+              currency: 'INR',
+              key: 'rzp_test_wztl1sZeeKcYZI',
+              amount: '100000',
+              name: 'CryptoXchange',
+              prefill: {
+                email: 'ansarimaaz786@gmail.com',
+                contact: '9167034639',
+                name: 'Maaz'
+              },
+              theme: {color: '#f7921b'}
+            }
+            RazorpayCheckout.open(options).then((data) => {
+              // handle success
+              alert(`Success: ${data.razorpay_payment_id}`);
+            }).catch((error) => {
+              // handle failure
+              alert(`Error: ${error.code} | ${error.description}`);
+            });
+          
+    }
     
 
     return (
     <Container>
         <Header>
             <Left>
-                <Button transparent onPress={ () => navigate('DrawerOpen') }>
-                <Icon name='menu' />
-                </Button>
             </Left>
             <Body>
                 <Title>Buy Bitcoin</Title>
@@ -78,7 +101,7 @@ render() {
                 <CardItem>
                     
                 <Body>
-                    <Button full style={{borderRadius:5, borderWidth:1}} textStyle={{color: '#87838B'}}>
+                    <Button onPress={ pay } full style={{borderRadius:5, borderWidth:1}} textStyle={{color: '#87838B'}}>
                     <Text>Buy</Text>
                     </Button>
                 </Body>
