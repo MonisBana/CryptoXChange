@@ -1,13 +1,11 @@
 import React, { Component } from 'react';
-import { Image, View } from 'react-native';
-import { Container, Card, CardItem, Form, Item, Label, Input, Thumbnail, Text , Content, Header, Left, Body, Right, Button, Icon, Title } from 'native-base';
-import RazorpayCheckout from 'react-native-razorpay';
+import { Image, View, Alert } from 'react-native';
+import { Container, Card, CardItem, Form, Item, Label, Input, Button, Thumbnail, Text , Content, Header, Left, Body, Right, Icon, Title } from 'native-base';
+import firebase from 'firebase';
+import ValidationComponent from 'react-native-form-validator';
 
-
-export default class Buy extends Component {
-
-
-        
+export default class Buy extends ValidationComponent {
+    
     constructor(props){
         super(props)
     
@@ -15,46 +13,40 @@ export default class Buy extends Component {
           amt: '',
           addr: '',
           email:'',
-          mobile: ''
+          mobile: '',
+          status: ''
         }
       }
-
-
-
-render() {
-
-    var { navigate } = this.props.navigation;
-
-    pay = () => {
-        
-            var options = {
-              description: 'Buy Bitcoin',
-              image: './Bitcoin.png',
-              currency: 'INR',
-              key: 'rzp_test_wztl1sZeeKcYZI',
-              amount: '100000',
-              name: 'CryptoXchange',
-              prefill: {
-                email: 'ansarimaaz786@gmail.com',
-                contact: '9167034639',
-                name: 'Maaz'
-              },
-              theme: {color: '#f7921b'}
-            }
-            RazorpayCheckout.open(options).then((data) => {
-              // handle success
-              alert(`Success: ${data.razorpay_payment_id}`);
-            }).catch((error) => {
-              // handle failure
-              alert(`Error: ${error.code} | ${error.description}`);
-            });
-          
+writeDatabase(amt,addr,email,mobile,status) {
+    if(this.validate({
+        amt: {numbers: true, required: true},
+        addr: {required: true},
+        email: {email: true,required: true},
+        mobile: {numbers: true,required: true} 
+    })){
+        <Text>Hello</Text>
+    firebase.database().ref("Buy").push().set({
+        Amount: amt,
+        Wallet_Address: addr,
+        Email:email,
+        Mobile:mobile,
+        Status:status
+    });
+    this.state = {
+          amt: '',
+          addr: '',
+          email:'',
+          mobile: '',
+          status: ''
+        }
     }
-    
-
+}
+render() {
+    var { navigate } = this.props.navigation;
+    const { amt } = this.state;
     return (
     <Container>
-        <Header>
+        <Header  style={{backgroundColor: '#f7921b'}}>
             <Left>
             </Left>
             <Body>
@@ -67,8 +59,8 @@ render() {
             <Card style={{flex: 0}}>
                 <CardItem>
                   
-                    <View style={{flex:1, flexDirection:'row', justifyContent:'center', }}>
-                        <Text style={{fontSize:20, color:'#32387F'}}>BUY BITCOIN ORDER</Text>
+                    <View style={{flex:1, flexDirection:'row', justifyContent:'center'}}>
+                        <Text style={{fontSize:20, color:'#f7921b'}}>BUY BITCOIN ORDER</Text>
                     </View>
                     
                 </CardItem>
@@ -101,7 +93,7 @@ render() {
                 <CardItem>
                     
                 <Body>
-                    <Button onPress={ pay } full style={{borderRadius:5, borderWidth:1}} textStyle={{color: '#87838B'}}>
+                    <Button onPress={() => this.writeDatabase(this.state.amt,this.state.addr,this.state.email,this.state.mobile,this.state.status)} full style={{borderRadius:5, borderWidth:1,backgroundColor: '#f7921b',borderColor: '#f7921b'}} textStyle={{color: '#87838B'}}>
                     <Text>Buy</Text>
                     </Button>
                 </Body>
