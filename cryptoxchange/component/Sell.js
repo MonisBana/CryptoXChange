@@ -10,15 +10,21 @@ export default class Sell extends ValidationComponent {
         
     constructor(props){
         super(props)
+
+        var { navigate } = this.props.navigation;
     
         this.state = {
-          amt: '',
-          name: '',
-          acc: '',
-          ifsc: '',
-          email:'',
-          mobile: '',
-          status: ''
+            amt: '',
+            name: '',
+            acc: '',
+            ifsc: '',
+            email:'',
+            mobile: '',
+            send_status: '',
+            gencode: '',
+            usercode:'',
+            txid:'',
+            userpay_status:''
         }
       }
 writeDatabase(amt,name,email,mobile,ifsc,acc,status) {
@@ -31,26 +37,34 @@ writeDatabase(amt,name,email,mobile,ifsc,acc,status) {
         ifsc: {reuired: true},
         acc: {reuired: true} 
     })){
-    firebase.database().ref("Sell").push().set({
-        Amount: amt,
-        Bank_Name: name,
-        Email:email,
-        Mobile:mobile,
-        IFSC:ifsc,
-        Acc_No: acc,
-        Status: status
-    });
-    this.state = {
-        amt: '',
-        name: '',
-        acc: '',
-        ifsc: '',
-        email:'',
-        mobile: '',
-        status: ''
-      }
+        this.emailsend(email,code);
+        this.props.navigation.navigate('Verify',{ buystate:this.state });
+    }
+    else{
+        alert("Please Enter Correct Input");
     }
 }
+
+emailsend = (email,code) =>{
+
+    const apikey = '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';
+    const msg = "Dear client,<br>The verification code for your Exchange Order is <b>" + code + " </b><br>Please do not share this code with anyone.<br>Thanks ";
+
+    let body = { "personalizations": [ { "to": [ { "email": email } ], "subject": "CryptoXchange Email Verification" } ], "from": { "email": "cryptoxchange97@gmail.com" }, "content": [ { "type": "text/html", "value": msg } ] }
+
+    fetch('https://api.sendgrid.com/v3/mail/send', {
+      method: 'POST',
+      headers: {
+      'Authorization': 'Bearer ' + apikey,
+      'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(body),
+    }).then((response) => {
+      this.setState({response: `${response.status} - ${response.ok}`});
+    });
+
+    
+  }
 
 render() {
 
@@ -59,7 +73,7 @@ render() {
 
     return (
     <Container>
-        <Header style={{backgroundColor: '#f7921b'}}>
+        <Header androidStatusBarColor="#f7921b" style={{backgroundColor: '#f7921b'}}>
             <Left>
             </Left>
             <Body>
@@ -112,8 +126,8 @@ render() {
 
                 <CardItem>    
                 <Body>
-                    <Button onPress={() =>this.writeDatabase(this.state.amt, this.state.name, this.state.email, this.state.mobile, this.state.ifsc, this.state.acc,this.state.status) } full style={{borderRadius:5, borderWidth:1,backgroundColor: '#f7921b',borderColor: '#f7921b'}} textStyle={{color: '#87838B'}}>
-                      <Text>Buy</Text>
+                    <Button onPress={() =>this.writeDatabase(this.state.amt, this.state.name, this.state.email, this.state.mobile, this.state.ifsc, this.state.acc,this.state.status) } full style={{borderRadius:10, borderWidth:1,backgroundColor: '#f7921b',borderColor: '#f7921b'}} textStyle={{color: '#87838B'}}>
+                      <Text>Sell</Text>
                     </Button>
                 </Body>
                 

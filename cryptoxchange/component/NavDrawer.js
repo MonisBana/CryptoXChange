@@ -6,6 +6,9 @@ import Buy from './Buy';
 import Sell from './Sell';
 import PriceList from './PriceList';
 import Payment from './Payment';
+import sample from './sample';
+import receivebtc from './ReceiveBtc';
+import Verify from './Verify';
 
 
 export default StackNavigator({
@@ -20,6 +23,15 @@ export default StackNavigator({
       },
       Payment:{
         screen:Payment,
+      },
+      Sample:{
+        screen:sample
+      },
+      ReceiveBtc:{
+        screen:receivebtc
+      },
+      Verify:{
+        screen:Verify
       }
 
   },

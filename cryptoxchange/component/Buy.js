@@ -5,18 +5,28 @@ import firebase from 'firebase';
 import ValidationComponent from 'react-native-form-validator';
 
 export default class Buy extends ValidationComponent {
+
+    
     
     constructor(props){
         super(props)
+
+        var { navigate } = this.props.navigation;
     
         this.state = {
-          amt: '',
-          addr: '',
-          email:'',
-          mobile: '',
-          status: ''
+            amt: '',
+            addr: '',
+            email:'',
+            mobile: '',
+            send_status: '',
+            gencod: '',
+            usercode:'',
+            txid:'',
+            userpay_status:''
         }
       }
+
+
 writeDatabase(amt,addr,email,mobile,status) {
     if(this.validate({
         amt: {numbers: true, required: true},
@@ -24,29 +34,72 @@ writeDatabase(amt,addr,email,mobile,status) {
         email: {email: true,required: true},
         mobile: {numbers: true,required: true} 
     })){
-        <Text>Hello</Text>
-    firebase.database().ref("Buy").push().set({
-        Amount: amt,
-        Wallet_Address: addr,
-        Email:email,
-        Mobile:mobile,
-        Status:status
-    });
-    this.state = {
-          amt: '',
-          addr: '',
-          email:'',
-          mobile: '',
-          status: ''
-        }
+
+        this.emailsend(email,code);
+        this.props.navigation.navigate('Verify',{ buystate:this.state });
+        
+        }   
+    else{
+        alert("Please Enter Correct Input");
     }
 }
+
+emailsend = (email,code) =>{
+
+    const apikey = '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';
+    const msg = "Dear client,<br>The verification code for your Exchange Order is <b>" + code + " </b><br>Please do not share this code with anyone.<br>Thanks ";
+
+    let body = { "personalizations": [ { "to": [ { "email": email } ], "subject": "CryptoXchange Email Verification" } ], "from": { "email": "cryptoxchange97@gmail.com" }, "content": [ { "type": "text/html", "value": msg } ] }
+
+    fetch('https://api.sendgrid.com/v3/mail/send', {
+      method: 'POST',
+      headers: {
+      'Authorization': 'Bearer ' + apikey,
+      'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(body),
+    }).then((response) => {
+      this.setState({response: `${response.status} - ${response.ok}`});
+    });
+
+    
+  }
+
+  getdata = (cemail) => {
+
+    //console.warn(cemail);
+
+    const ref = firebase.database().ref();
+    //const getvalue = ref.child('Buy').orderByValue().equalTo(cemail).on("value",
+    const getvalue = ref.child(`Buy/${ cemail }`);
+
+
+    
+    getvalue.on("value",
+
+    (data) => {
+
+        var buy = data.val();
+
+       this.getemail(buy,cemail);
+          
+  },
+     errdata);
+    function errdata(errorObject){
+        alert(errorObject.code);
+    }
+
+}
+
+    
+
+
 render() {
     var { navigate } = this.props.navigation;
     const { amt } = this.state;
     return (
     <Container>
-        <Header  style={{backgroundColor: '#f7921b'}}>
+        <Header androidStatusBarColor="#f7921b" style={{backgroundColor: '#f7921b'}}>
             <Left>
             </Left>
             <Body>
